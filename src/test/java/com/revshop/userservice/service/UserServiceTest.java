@@ -109,7 +109,7 @@ class UserServiceTest {
         updatedData.setName("John Updated");
 
         UserResponse response = userService.updateUser(1L, updatedData);
-        assertEquals("John Doe", response.getName()); // sampleUser name is returned because mock returns sampleUser
+        assertEquals("John Updated", response.getName());
     }
 
     @Test

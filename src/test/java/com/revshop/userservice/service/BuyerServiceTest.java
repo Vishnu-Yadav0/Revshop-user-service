@@ -53,6 +53,7 @@ class BuyerServiceTest {
         sampleBuyer = new Buyer();
         sampleBuyer.setUserId(1L);
         sampleBuyer.setUser(sampleUser);
+        sampleUser.setBuyerProfile(sampleBuyer);
     }
 
     @Test
