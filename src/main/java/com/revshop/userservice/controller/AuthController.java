@@ -1,10 +1,12 @@
 package com.revshop.userservice.controller;
 
 import com.revshop.userservice.dto.*;
+import com.revshop.userservice.exception.InvalidInputException;
 import com.revshop.userservice.model.Address;
 import com.revshop.userservice.model.Buyer;
 import com.revshop.userservice.model.Seller;
 import com.revshop.userservice.model.User;
+import com.revshop.userservice.repository.UserRepository;
 import com.revshop.userservice.service.BuyerService;
 import com.revshop.userservice.service.OtpService;
 import com.revshop.userservice.service.SellerService;
@@ -28,20 +30,26 @@ public class AuthController {
     private final BuyerService buyerService;
     private final SellerService sellerService;
     private final OtpService otpService;
+    private final UserRepository userRepository;
 
     public AuthController(UserService userService,
                           BuyerService buyerService,
                           SellerService sellerService,
-                          OtpService otpService) {
+                          OtpService otpService,
+                          UserRepository userRepository) {
         this.userService = userService;
         this.buyerService = buyerService;
         this.sellerService = sellerService;
         this.otpService = otpService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/register/buyer")
     public ResponseEntity<ApiResponse<BuyerDTO>> registerBuyer(@Valid @RequestBody BuyerDTO buyerDTO) {
         log.info("POST /api/auth/register/buyer - email={}", buyerDTO.getEmail());
+        if (userRepository.existsByEmail(buyerDTO.getEmail())) {
+            throw new InvalidInputException("Email already exists: " + buyerDTO.getEmail());
+        }
         User user = buildUserFromBuyerDTO(buyerDTO);
         Buyer buyer = buyerService.registerBuyer(user);
         BuyerDTO responseDTO = convertBuyerToDTO(buyer);
@@ -52,6 +60,9 @@ public class AuthController {
     @PostMapping("/register/seller")
     public ResponseEntity<ApiResponse<SellerDTO>> registerSeller(@Valid @RequestBody SellerDTO sellerDTO) {
         log.info("POST /api/auth/register/seller - email={}", sellerDTO.getEmail());
+        if (userRepository.existsByEmail(sellerDTO.getEmail())) {
+            throw new InvalidInputException("Email already exists: " + sellerDTO.getEmail());
+        }
         User user = buildUserFromSellerDTO(sellerDTO);
         Seller seller = sellerService.registerSeller(user, sellerDTO.getBusinessName(), sellerDTO.getBusinessDescription(), sellerDTO.getTaxId());
         SellerDTO responseDTO = convertSellerToDTO(seller);
