@@ -22,7 +22,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/users/check/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/api/users/**").permitAll()
+                .requestMatchers("/api/addresses/**").permitAll()
+                .anyRequest().permitAll()
             );
         return http.build();
     }

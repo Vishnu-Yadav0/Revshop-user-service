@@ -21,6 +21,7 @@ target/
 *.log
 logs/
 *.txt
+.env
 
 ### NetBeans ###
 /nbproject/private/
