@@ -37,6 +37,12 @@ public class AddressController {
         return ResponseEntity.ok(new ApiResponse<>("Addresses fetched", addresses));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<AddressDTO>> getAddressById(@PathVariable Long id) {
+        log.info("GET /api/addresses/{}", id);
+        return ResponseEntity.ok(new ApiResponse<>("Address fetched", addressService.getAddressById(id)));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<AddressDTO>> updateAddress(@PathVariable Long id, @RequestBody AddressDTO addressDTO) {
         log.info("PUT /api/addresses/{}", id);

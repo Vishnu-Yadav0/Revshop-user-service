@@ -66,6 +66,13 @@ public class AddressService {
         return mapToDTO(saved);
     }
 
+    public com.revshop.userservice.dto.AddressDTO getAddressById(Long id) {
+        log.info("Fetching address id={}", id);
+        return addressRepository.findById(id)
+                .map(this::mapToDTO)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+    }
+
     public List<com.revshop.userservice.dto.AddressDTO> getAddressesByUserId(Long userId) {
         return addressRepository.findByUserUserId(userId).stream()
                 .map(this::mapToDTO)

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import com.revshop.userservice.model.PasswordResetToken;
 import com.revshop.userservice.repository.PasswordResetTokenRepository;

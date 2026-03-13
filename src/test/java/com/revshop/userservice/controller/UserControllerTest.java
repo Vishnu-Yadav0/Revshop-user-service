@@ -1,11 +1,9 @@
 package com.revshop.userservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revshop.userservice.dto.ApiResponse;
 import com.revshop.userservice.dto.PasswordUpdateRequest;
 import com.revshop.userservice.dto.UserResponse;
 import com.revshop.userservice.model.Role;
-import com.revshop.userservice.model.User;
 import com.revshop.userservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
