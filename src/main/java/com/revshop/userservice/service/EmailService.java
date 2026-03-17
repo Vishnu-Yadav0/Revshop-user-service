@@ -31,8 +31,10 @@ public class EmailService {
         try {
             Map<String, String> request = Map.of("to", email, "otp", otp);
             restTemplate.postForEntity(NOTIFICATION_SERVICE_URL + "/otp/email", request, Void.class);
+            log.info("OTP email delivered to Notification Service for {}", email);
         } catch (Exception e) {
             log.error("Failed to call Notification Service for OTP email: {}", e.getMessage());
+            throw new RuntimeException("Failed to send OTP email. Please try again later.", e);
         }
     }
 

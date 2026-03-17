@@ -101,8 +101,14 @@ public class AuthController {
     @PostMapping("/otp/send")
     public ResponseEntity<ApiResponse<String>> sendOtp(@RequestParam String email) {
         log.info("POST /api/auth/otp/send - email={}", email);
-        otpService.generateOtp(email);
-        return ResponseEntity.ok(new ApiResponse<>("OTP sent successfully", null));
+        try {
+            otpService.generateOtp(email);
+            return ResponseEntity.ok(new ApiResponse<>("OTP sent successfully", null));
+        } catch (Exception e) {
+            log.error("Failed to send OTP to {}: {}", email, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>("Failed to send OTP email. Please check your email address and try again.", null));
+        }
     }
 
     @PostMapping("/otp/verify")
