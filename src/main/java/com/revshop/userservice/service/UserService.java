@@ -7,6 +7,7 @@ import com.revshop.userservice.exception.*;
 import com.revshop.userservice.security.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -166,9 +167,14 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void generatePasswordResetToken(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+        
+        // Delete any existing tokens for this user to avoid duplicate keys
+        tokenRepository.deleteByUser(user);
+        
         String token = java.util.UUID.randomUUID().toString();
         PasswordResetToken resetToken = 
             new PasswordResetToken(token, user, LocalDateTime.now().plusMinutes(15));
@@ -176,6 +182,7 @@ public class UserService {
         emailService.sendPasswordResetEmail(email, token);
     }
 
+    @Transactional
     public void resetPasswordWithToken(String token, String newPassword) {
         PasswordResetToken resetToken = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
